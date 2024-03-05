@@ -33,7 +33,7 @@ class StartFragment : Fragment() {
 
             Timber.i("Clicked ")
 
-            // findNavController().navigate(StartFragmentDirections.actionStartFragmentToGameFragment())
+        findNavController().navigate(StartFragmentDirections.actionStartFragmentToGameFragment())
         }
 
 

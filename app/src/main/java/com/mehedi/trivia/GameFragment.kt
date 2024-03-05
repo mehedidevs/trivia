@@ -80,6 +80,8 @@ class GameFragment : Fragment() {
     private var questionIndex = 0
     private val numQuestions = ((questions.size + 1) / 2).coerceAtMost(3)
 
+    var menuProvider: MenuProvider? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,7 +99,10 @@ class GameFragment : Fragment() {
         binding.game = this
         val menuHost: MenuHost = requireActivity()
 
-        menuHost.addMenuProvider(object : MenuProvider {
+
+
+
+        menuProvider = object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.overflow_menu, menu)
             }
@@ -106,16 +111,20 @@ class GameFragment : Fragment() {
 
                 return when (menuItem.itemId) {
                     R.id.aboutFragment -> {
+
                         NavigationUI.onNavDestinationSelected(menuItem, findNavController())
                         true
+
+
                     }
 
                     else -> false
                 }
 
             }
-        })
+        }
 
+        menuProvider?.let { menuHost.addMenuProvider(it) }
         // Set the onClickListener for the submitButton
         binding.submitButton.setOnClickListener {
             val checkedId = binding.questionRadioGroup.checkedRadioButtonId
