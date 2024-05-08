@@ -2,12 +2,20 @@ package com.mehedi.trivia
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.mehedi.trivia.databinding.FragmentGameBinding
 
 class GameFragment : Fragment() {
@@ -72,6 +80,8 @@ class GameFragment : Fragment() {
     private var questionIndex = 0
     private val numQuestions = ((questions.size + 1) / 2).coerceAtMost(3)
 
+    var menuProvider: MenuProvider? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -87,7 +97,34 @@ class GameFragment : Fragment() {
 
         // Bind this fragment class to the layout
         binding.game = this
+        val menuHost: MenuHost = requireActivity()
 
+
+
+
+        menuProvider = object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.overflow_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+
+                return when (menuItem.itemId) {
+                    R.id.aboutFragment -> {
+
+                        NavigationUI.onNavDestinationSelected(menuItem, findNavController())
+                        true
+
+
+                    }
+
+                    else -> false
+                }
+
+            }
+        }
+
+        menuProvider?.let { menuHost.addMenuProvider(it) }
         // Set the onClickListener for the submitButton
         binding.submitButton.setOnClickListener {
             val checkedId = binding.questionRadioGroup.checkedRadioButtonId
@@ -111,7 +148,13 @@ class GameFragment : Fragment() {
                     } else {
                         // We've won!  Navigate to the gameWonFragment.
 
-                        findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+                        //  findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+
+                        findNavController().navigate(
+                            GameFragmentDirections.actionGameFragmentToGameWonFragment(
+                                questions.size
+                            )
+                        )
                     }
                 } else {
                     // Game over! A wrong answer sends us to the gameOverFragment.

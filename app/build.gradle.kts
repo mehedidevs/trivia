@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.safeArgs)
 }
 
 android {
@@ -37,6 +38,10 @@ android {
         enable = true
     }
 
+    sourceSets {
+        getByName("main").java.srcDirs("build/generated/source/navigation-args")
+    }
+
 }
 
 dependencies {
@@ -44,6 +49,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.log.timber)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)

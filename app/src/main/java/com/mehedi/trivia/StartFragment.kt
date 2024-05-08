@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mehedi.trivia.databinding.FragmentStartBinding
+import timber.log.Timber
 
 class StartFragment : Fragment() {
 
@@ -29,9 +30,11 @@ class StartFragment : Fragment() {
     private fun setListener() {
 
         binding.playButton.setOnClickListener {
-            findNavController().navigate(R.id.action_startFragment_to_gameFragment)
-        }
 
+            Timber.i("Clicked ")
+
+        findNavController().navigate(StartFragmentDirections.actionStartFragmentToGameFragment())
+        }
 
 
     }
