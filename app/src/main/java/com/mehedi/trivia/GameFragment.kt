@@ -12,8 +12,6 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.mehedi.trivia.databinding.FragmentGameBinding
@@ -80,7 +78,7 @@ class GameFragment : Fragment() {
     private var questionIndex = 0
     private val numQuestions = ((questions.size + 1) / 2).coerceAtMost(3)
 
-    var menuProvider: MenuProvider? = null
+    private lateinit var menuProvider: MenuProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,20 +109,19 @@ class GameFragment : Fragment() {
 
                 return when (menuItem.itemId) {
                     R.id.aboutFragment -> {
-
                         NavigationUI.onNavDestinationSelected(menuItem, findNavController())
                         true
 
 
                     }
 
-                    else -> false
+                    else -> true
                 }
 
             }
         }
 
-        menuProvider?.let { menuHost.addMenuProvider(it) }
+        menuProvider.let { menuHost.addMenuProvider(it) }
         // Set the onClickListener for the submitButton
         binding.submitButton.setOnClickListener {
             val checkedId = binding.questionRadioGroup.checkedRadioButtonId
@@ -151,9 +148,7 @@ class GameFragment : Fragment() {
                         //  findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
 
                         findNavController().navigate(
-                            GameFragmentDirections.actionGameFragmentToGameWonFragment(
-                                questions.size
-                            )
+                            GameFragmentDirections.actionGameFragmentToGameWonFragment(questions.size)
                         )
                     }
                 } else {
@@ -165,6 +160,8 @@ class GameFragment : Fragment() {
         }
         return binding.root
     }
+
+//\
 
     // randomize the questions and set the first question
     private fun randomizeQuestions() {

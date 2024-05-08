@@ -8,12 +8,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.mehedi.trivia.databinding.FragmentGameWonBinding
 
 
@@ -76,7 +74,7 @@ class GameWonFragment : Fragment() {
         shareIntent.setType("text/plain")
             .putExtra(
                 Intent.EXTRA_TEXT,
-                getString(R.string.share_success_text, args.numQ, args.numQ)
+                getString(R.string.share_success_text, args.score, 0)
             )
 
         return shareIntent
